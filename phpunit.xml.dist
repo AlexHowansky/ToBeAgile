@@ -7,7 +7,7 @@
     colors="true"
 >
 
-    <testsuite name="App">
+    <testsuite name="eBaby">
         <directory>./tests/</directory>
     </testsuite>
 
