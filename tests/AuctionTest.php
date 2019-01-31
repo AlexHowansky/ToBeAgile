@@ -77,13 +77,14 @@ class AuctionTest extends \PHPUnit\Framework\TestCase
         new \ToBeAgile\Auction($this->user, $startPrice, $itemDescription, $startTime, $endTime);
     }
     
-    public function testCreateAuction()
+    public function testCreateGoodAuction()
     {
         $startPrice = 1.23;
         $itemDescription = "garbage can";
         $startTime = time() + 3600;
         $endTime = time() + 3600 * 2;
         $auction = new \ToBeAgile\Auction($this->user, $startPrice, $itemDescription, $startTime, $endTime);
+        $this->assertSame($this->user->getUserName(), $auction->getUser()->getUserName());
         $this->assertSame($startPrice, $auction->getStartingPrice());
         $this->assertSame($itemDescription, $auction->getItemDescription());
         $this->assertSame($startTime, $auction->getStartTime());
@@ -133,14 +134,17 @@ class AuctionTest extends \PHPUnit\Framework\TestCase
         $this->auction->bid($this->user, $bid);
     }
     
-    public function testBid()
+    public function testGoodBid()
     {
-        $bid = 1.50;
+        $bid = 1.23;
         $this->auction->onStart();
         $this->auction->bid($this->user, $bid);
         $this->assertSame($bid, $this->auction->getHighestBid());
         $this->assertInstanceOf('\ToBeAgile\User', $this->auction->getHighestBidder());
         $this->assertSame($this->user->getUserName(), $this->auction->getHighestBidder()->getUserName());
+        $bid = 1.50;
+        $this->auction->bid($this->user, $bid);
+        $this->assertSame($bid, $this->auction->getHighestBid());
     }
     
     /**
@@ -157,6 +161,16 @@ class AuctionTest extends \PHPUnit\Framework\TestCase
     public function testNoBidders()
     {
         $this->auction->getHighestBidder();
+    }
+    
+    /**
+     * @expectedException \Exception
+     */
+    public function testBidLessThanStart()
+    {
+        $bid = 1;
+        $this->auction->onStart();
+        $this->auction->bid($this->user, $bid);
     }
     
 }

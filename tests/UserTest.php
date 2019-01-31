@@ -19,5 +19,5 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($userName, $user->getUserName());
         $this->assertSame($password, $user->getPassword());
     }
-        
+
 }

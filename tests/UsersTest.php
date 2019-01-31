@@ -89,4 +89,17 @@ class UsersTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($user->isSeller());
     }
     
+    /**
+     * @expectedException \Exception
+     */
+    public function testCantCreateDuplicateUser()
+    {
+        $firstName = 'Big';
+        $lastName = 'Bird';
+        $userEmail = 'bigbird@sesame.com';
+        $userName = 'BigBird';
+        $password = 'IamYellow';
+        $this->users->register($firstName, $lastName, $userEmail, $userName, $password);
+    }
+
 }

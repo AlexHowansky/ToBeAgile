@@ -42,6 +42,11 @@ class Auction
         $this->endTime = $endTime;
     }
     
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
     public function getStartingPrice(): float
     {
         return $this->startPrice;
@@ -85,11 +90,22 @@ class Auction
         if ($user->isLoggedIn() === false) {
             throw new \Exception('User is not logged in.');
         }
-        if ($bid <= $this->highestBid) {
-            throw new \Exception('Bid must be higher than ' . $this->highestBid);
+        if ($this->hasBids()) {
+            if ($bid <= $this->highestBid) {
+                throw new \Exception('Bid must be higher than existing bid ' . $this->highestBid);
+            }
+        } else {
+            if ($bid < $this->startPrice) {
+                throw new \Exception('Bid must be higher than starting bid ' . $this->startPrice);
+            }
         }
         $this->highestBidder = $user;
         $this->highestBid = $bid;
+    }
+    
+    public function hasBids(): bool
+    {
+        return $this->highestBidder !== null;
     }
     
     public function getHighestBidder(): User {
