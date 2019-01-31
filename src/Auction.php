@@ -9,6 +9,10 @@ class Auction
     const STATUS_OPEN = 1;
     const STATUS_CLOSED = 2;
     
+    const CATEGORY_DOWNLOADABLE_SOFTWARE = "Downloadable Software";
+    const CATEGORY_CAR = "Car";
+    const CATEGORY_OTHER = "Other";
+    
     protected $user;
     
     protected $startPrice;
@@ -26,8 +30,14 @@ class Auction
     protected $highestBid = null;
     
     protected $postOffice = null;
+    
+    protected $sellerAmount = 0;
+     
+    protected $buyerAmount = 0;
+    
+    protected $category;
 
-    public function __construct(User $user, float $startPrice, string $itemDescription, int $startTime, int $endTime)
+    public function __construct(User $user, float $startPrice, string $itemDescription, int $startTime, int $endTime, string $category)
     {
         if ($user->isLoggedIn() === false) {
             throw new \Exception('User not logged in');
@@ -46,6 +56,7 @@ class Auction
         $this->itemDescription = $itemDescription;
         $this->startTime = $startTime;
         $this->endTime = $endTime;
+        $this->category = $category;
     }
     
     public function getUser(): User
@@ -92,12 +103,18 @@ class Auction
             throw new \Exception('Only open auctions may be closed.');
         }
         $this->status = self::STATUS_CLOSED;
-        if ($this->postOffice == null) {
-             return;
+        if ($this->postOffice instanceOf PostOffice) {
+            (\ToBeAgile\Notifier\NotifierFactory::getNotifier($this))->notify();
         }
-        (\ToBeAgile\Notifier\NotifierFactory::getNotifier($this))->notify();
+        if ($this->hasBids()) {
+            $this->sellerAmount = $this->getHighestBid();
+            $this->buyerAmount = $this->getHighestBid();
+            foreach (\ToBeAgile\Fee\FeeFactory::getFees($this) as $fee) {
+                $fee->computeFee();
+            }
+        }
     }
-    
+
     public function bid(User $user, float $bid)
     {
         if ($this->isOpen() === false) {
@@ -168,4 +185,37 @@ class Auction
         return 'Congratulations! You won an auction for a ' . $this->getItemDescription() . ' from ' . $this->getUser()->getUserEmail() . ' for ' . $this->getHighestBid() . ' monies.';    
     }
     
+    public function getSellerAmount()
+    {
+        return $this->sellerAmount;
+    }
+    
+    public function getCategory()
+    {
+        return $this->category;
+    }
+    
+    public function getBuyerAmount()
+    {
+        return $this->buyerAmount;
+    }
+    
+    public function getShippingFee()
+    {
+        return $this->shippingFee;
+    }
+    
+    public function getTax()
+    {
+        return $this->tax;
+    }
+    
+    public function addSellerAmount(float $amount)
+    {
+        $this->sellerAmount += $amount;
+    }
+    public function addBuyerAmount(float $amount)
+    {
+        $this->buyerAmount += $amount;
+    }
 }
