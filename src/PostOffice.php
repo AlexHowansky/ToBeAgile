@@ -1,6 +1,6 @@
 <?php
 
-namespace \ToBeAgile;
+namespace ToBeAgile;
 
 class PostOffice
 {
@@ -10,6 +10,7 @@ class PostOffice
     public function sendEmail(string $address, string $message)
     {
         $this->emails[] = [$address, $message];
+        file_put_contents('/tmp/mail', "To: $address, Message: $message\n", FILE_APPEND);
     }
 
     public function findEmail(string $address, string $message): string

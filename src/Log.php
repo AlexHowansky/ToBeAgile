@@ -1,6 +1,6 @@
 <?php
 
-namespace \ToBeAgile;
+namespace ToBeAgile;
 
 class Log
 {

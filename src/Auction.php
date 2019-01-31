@@ -5,6 +5,10 @@ namespace ToBeAgile;
 class Auction
 {
     
+    const STATUS_NEW = 0;
+    const STATUS_OPEN = 1;
+    const STATUS_CLOSED = 2;
+    
     protected $user;
     
     protected $startPrice;
@@ -15,11 +19,13 @@ class Auction
     
     protected $endTime;
     
-    protected $isOpen = false;
+    protected $status = self::STATUS_NEW;
     
     protected $highestBidder = null;
     
     protected $highestBid = null;
+    
+    protected $postOffice = null;
 
     public function __construct(User $user, float $startPrice, string $itemDescription, int $startTime, int $endTime)
     {
@@ -69,17 +75,27 @@ class Auction
     
     public function isOpen(): bool
     {
-        return $this->isOpen;
+        return $this->status == self::STATUS_OPEN;
     }
     
     public function onStart()
     {
-        $this->isOpen = true;
+        if ($this->status !== self::STATUS_NEW) {
+            throw new \Exception('Only new auctions may be started.');
+        }
+        $this->status = self::STATUS_OPEN;
     }
     
     public function onClose()
     {
-        $this->isOpen = false;
+        if ($this->status !== self::STATUS_OPEN) {
+            throw new \Exception('Only open auctions may be closed.');
+        }
+        $this->status = self::STATUS_CLOSED;
+        if ($this->postOffice == null) {
+             return;
+        }
+        (\ToBeAgile\Notifier\NotifierFactory::getNotifier($this))->notify();
     }
     
     public function bid(User $user, float $bid)
@@ -121,4 +137,35 @@ class Auction
         }
         return $this->highestBid;
     }
+    
+    public function getStatus(): int
+    {
+        return $this->status;
+    }
+    
+    public function setPostOffice(PostOffice $postOffice)
+    {
+        $this->postOffice = $postOffice;
+    }
+    
+    public function getPostOffice(): PostOffice
+    {
+        return $this->postOffice;
+    }
+    
+    public function getNoBidsMessage()
+    {
+        return 'Sorry, your auction for ' . $this->getItemDescription() . ' did not have any bidders.';
+    }
+    
+    public function getSoldMessage()
+    {
+        return 'Your ' . $this->getItemDescription() . ' auction sold to bidder ' . $this->getHighestBidder()->getUserEmail() . ' for ' . $this->getHighestBid() . ' monies.';
+    }
+    
+    public function getWonMessage()
+    {
+        return 'Congratulations! You won an auction for a ' . $this->getItemDescription() . ' from ' . $this->getUser()->getUserEmail() . ' for ' . $this->getHighestBid() . ' monies.';    
+    }
+    
 }

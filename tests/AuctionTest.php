@@ -8,6 +8,8 @@ class AuctionTest extends \PHPUnit\Framework\TestCase
     protected $user;
     
     protected $auction;
+    
+    protected $postOffice;
 
     public function setUp()
     {
@@ -25,6 +27,9 @@ class AuctionTest extends \PHPUnit\Framework\TestCase
         $startTime = time() + 3600;
         $endTime = time() + 3600 * 2;
         $this->auction = new \ToBeAgile\Auction($this->user, $startPrice, $itemDescription, $startTime, $endTime);
+        
+        $this->postOffice = new \ToBeAgile\PostOffice();
+        $this->auction->setPostOffice($this->postOffice);
     }
 
     /**
@@ -89,6 +94,7 @@ class AuctionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($itemDescription, $auction->getItemDescription());
         $this->assertSame($startTime, $auction->getStartTime());
         $this->assertSame($endTime, $auction->getEndTime());
+        $this->assertTrue($auction->getStatus() === \ToBeAgile\Auction::STATUS_NEW);
     }
     
     public function testAuctionOpen()
@@ -173,4 +179,59 @@ class AuctionTest extends \PHPUnit\Framework\TestCase
         $this->auction->bid($this->user, $bid);
     }
     
+    /**
+     * @expectedException \Exception
+     */
+    public function testCantOpenAlreadyOpened()
+    {
+        $this->auction->onStart();
+        $this->assertTrue($this->auction->getStatus() === \ToBeAgile\Auction::STATUS_OPEN);
+        $this->auction->onStart();
+    }
+    
+    /**
+     * @expectedException \Exception
+     */
+    public function testCantCloseAlreadyClosed()
+    {
+        $this->auction->onStart();
+        $this->auction->onClose();
+        $this->auction->onClose();
+    }
+    
+    /**
+     * @expectedException \Exception
+     */
+    public function testCantCloseNew()
+    {
+        $this->auction->onClose();
+    }
+    
+    /**
+     * @expectedException \Exception
+     */
+    public function testCantReopen()
+    {
+        $this->auction->onStart();
+        $this->auction->onClose();
+        $this->auction->onStart();
+    }
+    
+    public function testCloseNoBidder()
+    {
+        $this->assertFalse($this->postOffice->doesLogContain($this->auction->getUser()->getUserEmail(), $this->auction->getNoBidsMessage()));
+        $this->auction->onStart();
+        $this->auction->onClose();
+        $this->assertTrue($this->postOffice->doesLogContain($this->auction->getUser()->getUserEmail(), $this->auction->getNoBidsMessage()));
+    }
+    
+    public function testCloseBidder()
+    {
+        $this->auction->onStart();
+        $this->auction->bid($this->user, 3);
+        $this->auction->onClose();
+        $this->assertTrue($this->postOffice->doesLogContain($this->auction->getUser()->getUserEmail(), $this->auction->getSoldMessage()));
+        $this->assertTrue($this->postOffice->doesLogContain($this->auction->getHighestBidder()->getUserEmail(), $this->auction->getWonMessage()));
+    }
+
 }
