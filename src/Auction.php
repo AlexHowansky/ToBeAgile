@@ -24,7 +24,7 @@ class Auction
     protected $highestBidder = null;
 
     protected $itemDescription;
-    
+
     protected $logger = null;
 
     protected $postOffice = null;
@@ -235,7 +235,7 @@ class Auction
             $process->process();
         }
     }
-    
+
     public function setLogger(Logger $logger)
     {
         $this->logger = $logger;

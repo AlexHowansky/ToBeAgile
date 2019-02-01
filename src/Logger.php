@@ -19,7 +19,7 @@ class Logger
 
     public function log(string $fileName, string $message)
     {
-        file_put_contents("/tmp/log", "$fileName : $message\n");
+        file_put_contents('/tmp/log', $fileName . ' : ' . $message . "\n");
         $this->logs[] = [$fileName, $message];
     }
 
