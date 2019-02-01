@@ -14,6 +14,8 @@ class CloseProcessFactory
             new SellerFee($auction),
             new CarLog($auction),
             new ExpensiveItemLog($auction),
+            new NoBidNotifier($auction),
+            new BidNotifier($auction),
         ];
     }
 

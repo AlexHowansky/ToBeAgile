@@ -9,7 +9,10 @@ class CarLog extends AbstractProcess
 
     public function process()
     {
-        if ($this->getAuction()->getLogger() === null) {
+        if (
+            $this->getAuction()->hasBids() === false ||
+            $this->getAuction()->getLogger() === null
+        ) {
             return;
         }
         if ($this->getAuction()->getCategory() === \ToBeAgile\Auction::CATEGORY_CAR) {

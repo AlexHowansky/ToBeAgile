@@ -12,6 +12,7 @@ class ExpensiveItemLog extends AbstractProcess
     public function process()
     {
         if (
+            $this->getAuction()->hasBids() === false ||
             $this->getAuction()->getLogger() === null ||
             $this->getAuction()->getHighestBid() <= self::THRESHOLD
         ) {

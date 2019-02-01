@@ -9,6 +9,9 @@ class SellerFee extends AbstractProcess
 
     public function process()
     {
+        if ($this->getAuction()->hasBids() === false) {
+            return;
+        }
         $this->getAuction()->addSellerAmount($this->getAuction()->getHighestBid() * - self::FEE_RATE);
     }
 

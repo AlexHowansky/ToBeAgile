@@ -11,6 +11,9 @@ class LuxuryCarTaxFee extends AbstractProcess
 
     public function process()
     {
+        if ($this->getAuction()->hasBids() === false) {
+            return;
+        }
         if (
             $this->getAuction()->getCategory() === \ToBeAgile\Auction::CATEGORY_CAR &&
             $this->getAuction()->getHighestBid() > self::THRESHOLD

@@ -14,9 +14,13 @@ class StandardShippingFee extends AbstractProcess
 
     public function process()
     {
-        if (in_array($this->getAuction()->getCategory(), self::NOT_APPLICABLE_CATEGORIES) === false) {
-            $this->getAuction()->addBuyerAmount(self::FEE);
+        if (
+            $this->getAuction()->hasBids() === false ||
+            in_array($this->getAuction()->getCategory(), self::NOT_APPLICABLE_CATEGORIES)
+        ) {
+            return;
         }
+        $this->getAuction()->addBuyerAmount(self::FEE);
     }
 
 }

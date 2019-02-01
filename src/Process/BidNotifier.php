@@ -1,12 +1,18 @@
 <?php
 
-namespace ToBeAgile\Notifier;
+namespace ToBeAgile\Process;
 
-class Bids extends AbstractNotifier
+class BidNotifier extends AbstractProcess
 {
-
-    public function notify()
+        
+    public function process()
     {
+        if (
+            $this->getAuction()->hasBids() === false ||
+            $this->getAuction()->getPostOffice() === null
+        ) {
+            return;
+        }
         $this->getAuction()->getPostOffice()->sendEmail(
             $this->getAuction()->getUser()->getUserEmail(),
             $this->getAuction()->getSoldMessage()

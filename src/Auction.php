@@ -144,7 +144,7 @@ class Auction
         return sprintf('Sorry, your auction for %s did not have any bidders.', $this->getItemDescription());
     }
 
-    public function getPostOffice(): PostOffice
+    public function getPostOffice()
     {
         return $this->postOffice;
     }
@@ -210,9 +210,6 @@ class Auction
             throw new \Exception('Only open auctions may be closed.');
         }
         $this->status = self::STATUS_CLOSED;
-        if ($this->postOffice instanceof PostOffice) {
-            (\ToBeAgile\Notifier\NotifierFactory::getNotifier($this))->notify();
-        }
         $this->runCloseProcesses();
     }
 
@@ -226,11 +223,8 @@ class Auction
 
     protected function runCloseProcesses()
     {
-        if ($this->hasBids() === false) {
-            return;
-        }
-        $this->sellerAmount = $this->getHighestBid();
-        $this->buyerAmount = $this->getHighestBid();
+        $this->sellerAmount = $this->hasBids() ? $this->getHighestBid() : null;
+        $this->buyerAmount = $this->hasBids() ? $this->getHighestBid() : null;
         foreach (\ToBeAgile\Process\CloseProcessFactory::getProcesses($this) as $process) {
             $process->process();
         }
