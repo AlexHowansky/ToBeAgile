@@ -223,8 +223,8 @@ class Auction
 
     protected function runCloseProcesses()
     {
-        $this->sellerAmount = $this->hasBids() ? $this->getHighestBid() : null;
-        $this->buyerAmount = $this->hasBids() ? $this->getHighestBid() : null;
+        $this->sellerAmount = $this->hasBids() === true ? $this->getHighestBid() : null;
+        $this->buyerAmount = $this->hasBids() === true ? $this->getHighestBid() : null;
         foreach (\ToBeAgile\Process\CloseProcessFactory::getProcesses($this) as $process) {
             $process->process();
         }

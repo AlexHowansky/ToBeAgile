@@ -4,7 +4,7 @@ namespace ToBeAgile\Process;
 
 class NoBidNotifier extends AbstractProcess
 {
-        
+
     public function process()
     {
         if (

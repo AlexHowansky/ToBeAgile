@@ -4,7 +4,7 @@ namespace ToBeAgile\Process;
 
 class BidNotifier extends AbstractProcess
 {
-        
+
     public function process()
     {
         if (
