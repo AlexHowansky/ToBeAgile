@@ -77,18 +77,7 @@ class UsersTest extends \PHPUnit\Framework\TestCase
         $user->logout();
         $this->assertFalse($user->isLoggedIn());
     }
-    
-    public function testIsSeller()
-    {
-        $userName = 'BigBird';
-        $user = $this->users->findByUserName($userName);
-        $this->assertFalse($user->isSeller());
-        $user->setSeller(true);
-        $this->assertTrue($user->isSeller());
-        $user->setSeller(false);
-        $this->assertFalse($user->isSeller());
-    }
-    
+  
     /**
      * @expectedException \Exception
      */

@@ -5,19 +5,54 @@ namespace ToBeAgileTest;
 class UserTest extends \PHPUnit\Framework\TestCase
 {
     
-    public function testCreateUser()
+    protected $user = null;
+    
+    public function setUp()
     {
         $firstName = 'Groverly';
         $lastName = 'Spielmann';
         $userEmail = 'grover@sesame.com';
         $userName = 'SuperGrover';
         $password = 'DerthNader';
-        $user = new \ToBeAgile\User($firstName, $lastName, $userEmail, $userName, $password);
-        $this->assertSame($firstName, $user->getFirstName());
-        $this->assertSame($lastName, $user->getLastName());
-        $this->assertSame($userEmail, $user->getUserEmail());
-        $this->assertSame($userName, $user->getUserName());
-        $this->assertSame($password, $user->getPassword());
+        $this->user = new \ToBeAgile\User($firstName, $lastName, $userEmail, $userName, $password);
+    }
+
+    public function testCreateUser()
+    {
+        $this->assertSame('Groverly', $this->user->getFirstName());
+        $this->assertSame('Spielmann', $this->user->getLastName());
+        $this->assertSame('grover@sesame.com', $this->user->getUserEmail());
+        $this->assertSame('SuperGrover', $this->user->getUserName());
+        $this->assertSame('DerthNader', $this->user->getPassword());
+    }
+    
+    public function testSeller()
+    {
+        $this->assertFalse($this->user->isSeller());
+        $this->user->setSeller(true);
+        $this->assertTrue($this->user->isSeller());
+        $this->user->setSeller(false);
+        $this->assertFalse($this->user->isSeller());
+    }
+    
+    /**
+     * @expectedException \Exception
+     */
+    public function testPreferredSellerNotSeller()
+    {
+        $this->user->setSeller(false);
+        $this->user->setPreferredSeller(true);
+    }
+    
+    public function testPreferredSeller()
+    {
+        $this->user->setSeller(true);
+        $this->assertFalse($this->user->isPreferredSeller());
+        $this->user->setPreferredSeller(true);
+        $this->assertTrue($this->user->isPreferredSeller());
+        $this->user->setPreferredSeller(false);
+        $this->assertFalse($this->user->isPreferredSeller());
+
     }
 
 }

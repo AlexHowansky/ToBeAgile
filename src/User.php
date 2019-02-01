@@ -6,6 +6,8 @@ class User
 {
 
     protected $firstName;
+    
+    protected $isPreferredSeller = false;
 
     protected $isSeller = false;
 
@@ -63,6 +65,11 @@ class User
         return $this->loggedIn;
     }
 
+    public function isPreferredSeller(): bool
+    {
+        return $this->isPreferredSeller;
+    }
+
     public function isSeller(): bool
     {
         return $this->isSeller;
@@ -76,6 +83,14 @@ class User
     public function logout()
     {
         $this->loggedIn = false;
+    }
+
+    public function setPreferredSeller(bool $isPreferredSeller)
+    {
+        if ($this->isSeller() === false) {
+            throw new \Exception('Only sellers may be preferred sellers.');
+        }
+        $this->isPreferredSeller = $isPreferredSeller;
     }
 
     public function setSeller(bool $isSeller)
