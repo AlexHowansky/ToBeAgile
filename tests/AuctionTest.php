@@ -117,9 +117,9 @@ class AuctionTest extends \PHPUnit\Framework\TestCase
      */
     public function testBidUserNotLoggedIn()
     {
-        $bid = 0;
         $this->user->logout();
-        $this->auction->bid($this->user, $bid);
+        $this->auction->onStart();
+        $this->auction->bid($this->user, 0);
     }
 
     /**
@@ -246,27 +246,37 @@ class AuctionTest extends \PHPUnit\Framework\TestCase
 
     public function testCloseCarShipping()
     {
-        $startPrice = 15000;
+        $startPrice = \ToBeAgile\Fee\LuxuryCarTax::THRESHOLD;
         $itemDescription = 'Maserati';
         $startTime = time() + 3600;
         $endTime = time() + 3600 * 2;
         $auction = new \ToBeAgile\Auction($this->user, $startPrice, $itemDescription, $startTime, $endTime, \ToBeAgile\Auction::CATEGORY_CAR);
         $auction->onStart();
-        $auction->bid($this->user, 20000);
+        $auction->bid($this->user, $startPrice);
         $auction->onClose();
-        $this->assertEquals($auction->getHighestBid() + 1000, $auction->getBuyerAmount(), '', 0.01);
+        $this->assertEquals(
+            $auction->getHighestBid() + \ToBeAgile\Fee\CarShipping::FEE,
+            $auction->getBuyerAmount(),
+            '',
+            0.01
+        );
     }
     
     public function testLuxuryCar()
     {
-        $startPrice = 75000;
+        $startPrice = \ToBeAgile\Fee\LuxuryCarTax::THRESHOLD + 1;
         $itemDescription = 'Datsun';
         $startTime = time() + 3600;
         $endTime = time() + 3600 * 2;
         $auction = new \ToBeAgile\Auction($this->user, $startPrice, $itemDescription, $startTime, $endTime, \ToBeAgile\Auction::CATEGORY_CAR);
         $auction->onStart();
-        $auction->bid($this->user, 80000);
+        $auction->bid($this->user, $startPrice);
         $auction->onClose();
-        $this->assertEquals($auction->getHighestBid() * 1.04 + 1000, $auction->getBuyerAmount(), '', 0.01);
+        $this->assertEquals(
+            $auction->getHighestBid() * (1 + \ToBeAgile\Fee\LuxuryCarTax::TAX_RATE) + \ToBeAgile\Fee\CarShipping::FEE,
+            $auction->getBuyerAmount(),
+            '',
+            0.01
+        );
     }
 }

@@ -96,6 +96,18 @@ class Auction
         $this->highestBid = $bid;
     }
 
+    protected function computeFees()
+    {
+        if ($this->hasBids() === false) {
+            return;
+        }
+        $this->sellerAmount = $this->getHighestBid();
+        $this->buyerAmount = $this->getHighestBid();
+        foreach (\ToBeAgile\Fee\FeeFactory::getFees($this) as $fee) {
+            $fee->computeFee();
+        }
+    }
+
     public function getBuyerAmount()
     {
         return $this->buyerAmount;
@@ -206,13 +218,7 @@ class Auction
         if ($this->postOffice instanceof PostOffice) {
             (\ToBeAgile\Notifier\NotifierFactory::getNotifier($this))->notify();
         }
-        if ($this->hasBids() === true) {
-            $this->sellerAmount = $this->getHighestBid();
-            $this->buyerAmount = $this->getHighestBid();
-            foreach (\ToBeAgile\Fee\FeeFactory::getFees($this) as $fee) {
-                $fee->computeFee();
-            }
-        }
+        $this->computeFees();
     }
 
     public function onStart()
