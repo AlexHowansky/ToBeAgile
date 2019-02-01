@@ -301,4 +301,21 @@ class AuctionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->logger->findMessage($fileName, $message));
     }
 
+    public function testExpensiveSale()
+    {
+        $startPrice = \ToBeAgile\Process\ExpensiveItemLog::THRESHOLD + 1;
+        $itemDescription = 'widget';
+        $startTime = time() + 3600;
+        $endTime = time() + 3600 * 2;
+        $auction = new \ToBeAgile\Auction($this->user, $startPrice, $itemDescription, $startTime, $endTime, \ToBeAgile\Auction::CATEGORY_OTHER);
+        $auction->setLogger($this->logger);
+        $auction->onStart();
+        $auction->bid($this->user, $startPrice);
+        $fileName = 'expensive.log';
+        $message = 'SuperGrover sold an expensive item valued at 10001.00 to SuperGrover';
+        $this->assertFalse($this->logger->findMessage($fileName, $message));
+        $auction->onClose();
+        $this->assertTrue($this->logger->findMessage($fileName, $message));
+    }
+
 }
