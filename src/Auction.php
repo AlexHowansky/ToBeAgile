@@ -24,6 +24,8 @@ class Auction
     protected $highestBidder = null;
 
     protected $itemDescription;
+    
+    protected $logger = null;
 
     protected $postOffice = null;
 
@@ -132,6 +134,11 @@ class Auction
         return $this->itemDescription;
     }
 
+    public function getLogger()
+    {
+        return $this->logger;
+    }
+
     public function getNoBidsMessage()
     {
         return sprintf('Sorry, your auction for %s did not have any bidders.', $this->getItemDescription());
@@ -227,6 +234,11 @@ class Auction
         foreach (\ToBeAgile\Process\CloseProcessFactory::getProcesses($this) as $process) {
             $process->process();
         }
+    }
+    
+    public function setLogger(Logger $logger)
+    {
+        $this->logger = $logger;
     }
 
     public function setPostOffice(PostOffice $postOffice)

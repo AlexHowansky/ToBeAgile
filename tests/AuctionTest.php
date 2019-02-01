@@ -30,6 +30,10 @@ class AuctionTest extends \PHPUnit\Framework\TestCase
 
         $this->postOffice = new \ToBeAgile\PostOffice();
         $this->auction->setPostOffice($this->postOffice);
+        
+        $this->logger = new \ToBeAgile\Logger();
+        $this->auction->setLogger($this->logger);
+
     }
 
     /**
@@ -279,4 +283,22 @@ class AuctionTest extends \PHPUnit\Framework\TestCase
             0.01
         );
     }
+    
+    public function testLogCarSale()
+    {
+        $startPrice = \ToBeAgile\Process\LuxuryCarTaxFee::THRESHOLD;
+        $itemDescription = 'Datsun';
+        $startTime = time() + 3600;
+        $endTime = time() + 3600 * 2;
+        $auction = new \ToBeAgile\Auction($this->user, $startPrice, $itemDescription, $startTime, $endTime, \ToBeAgile\Auction::CATEGORY_CAR);
+        $auction->setLogger($this->logger);
+        $auction->onStart();
+        $auction->bid($this->user, $startPrice);
+        $fileName = 'car.log';
+        $message = 'SuperGrover sold a car valued at 50000.00 to SuperGrover';
+        $this->assertFalse($this->logger->findMessage($fileName, $message));
+        $auction->onClose();
+        $this->assertTrue($this->logger->findMessage($fileName, $message));
+    }
+
 }

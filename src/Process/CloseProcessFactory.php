@@ -12,6 +12,7 @@ class CloseProcessFactory
             new LuxuryCarTaxFee($auction),
             new CarShippingFee($auction),
             new SellerFee($auction),
+            new CarLog($auction),
         ];
     }
 
