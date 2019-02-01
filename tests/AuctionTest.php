@@ -246,7 +246,7 @@ class AuctionTest extends \PHPUnit\Framework\TestCase
 
     public function testCloseCarShipping()
     {
-        $startPrice = \ToBeAgile\Fee\LuxuryCarTax::THRESHOLD;
+        $startPrice = \ToBeAgile\Process\LuxuryCarTaxFee::THRESHOLD;
         $itemDescription = 'Maserati';
         $startTime = time() + 3600;
         $endTime = time() + 3600 * 2;
@@ -255,7 +255,7 @@ class AuctionTest extends \PHPUnit\Framework\TestCase
         $auction->bid($this->user, $startPrice);
         $auction->onClose();
         $this->assertEquals(
-            $auction->getHighestBid() + \ToBeAgile\Fee\CarShipping::FEE,
+            $auction->getHighestBid() + \ToBeAgile\Process\CarShippingFee::FEE,
             $auction->getBuyerAmount(),
             '',
             0.01
@@ -264,7 +264,7 @@ class AuctionTest extends \PHPUnit\Framework\TestCase
     
     public function testLuxuryCar()
     {
-        $startPrice = \ToBeAgile\Fee\LuxuryCarTax::THRESHOLD + 1;
+        $startPrice = \ToBeAgile\Process\LuxuryCarTaxFee::THRESHOLD + 1;
         $itemDescription = 'Datsun';
         $startTime = time() + 3600;
         $endTime = time() + 3600 * 2;
@@ -273,7 +273,7 @@ class AuctionTest extends \PHPUnit\Framework\TestCase
         $auction->bid($this->user, $startPrice);
         $auction->onClose();
         $this->assertEquals(
-            $auction->getHighestBid() * (1 + \ToBeAgile\Fee\LuxuryCarTax::TAX_RATE) + \ToBeAgile\Fee\CarShipping::FEE,
+            $auction->getHighestBid() * (1 + \ToBeAgile\Process\LuxuryCarTaxFee::TAX_RATE) + \ToBeAgile\Process\CarShippingFee::FEE,
             $auction->getBuyerAmount(),
             '',
             0.01

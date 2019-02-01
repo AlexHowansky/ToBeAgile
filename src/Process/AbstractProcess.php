@@ -1,8 +1,8 @@
 <?php
 
-namespace ToBeAgile\Fee;
+namespace ToBeAgile\Process;
 
-abstract class AbstractFee implements FeeInterface
+abstract class AbstractProcess implements ProcessInterface
 {
 
     protected $auction;

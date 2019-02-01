@@ -1,15 +1,15 @@
 <?php
 
-namespace ToBeAgile\Fee;
+namespace ToBeAgile\Process;
 
-class LuxuryCarTax extends AbstractFee
+class LuxuryCarTaxFee extends AbstractProcess
 {
 
     const THRESHOLD = 50000;
 
     const TAX_RATE = 0.04;
 
-    public function computeFee()
+    public function process()
     {
         if (
             $this->getAuction()->getCategory() === \ToBeAgile\Auction::CATEGORY_CAR &&

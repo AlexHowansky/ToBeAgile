@@ -1,8 +1,8 @@
 <?php
 
-namespace ToBeAgile\Fee;
+namespace ToBeAgile\Process;
 
-class StandardShipping extends AbstractFee
+class StandardShippingFee extends AbstractProcess
 {
 
     const FEE = 10;
@@ -12,7 +12,7 @@ class StandardShipping extends AbstractFee
         \ToBeAgile\Auction::CATEGORY_DOWNLOADABLE_SOFTWARE,
     ];
 
-    public function computeFee()
+    public function process()
     {
         if (in_array($this->getAuction()->getCategory(), self::NOT_APPLICABLE_CATEGORIES) === false) {
             $this->getAuction()->addBuyerAmount(self::FEE);

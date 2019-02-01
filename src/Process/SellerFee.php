@@ -1,13 +1,13 @@
 <?php
 
-namespace ToBeAgile\Fee;
+namespace ToBeAgile\Process;
 
-class SellerFee extends AbstractFee
+class SellerFee extends AbstractProcess
 {
 
     const FEE_RATE = 0.02;
 
-    public function computeFee()
+    public function process()
     {
         $this->getAuction()->addSellerAmount($this->getAuction()->getHighestBid() * - self::FEE_RATE);
     }
