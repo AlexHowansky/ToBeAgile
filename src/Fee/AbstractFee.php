@@ -2,7 +2,7 @@
 
 namespace ToBeAgile\Fee;
 
-abstract class AbstractFee implements FeeInterface 
+abstract class AbstractFee implements FeeInterface
 {
 
     protected $auction;
@@ -11,7 +11,7 @@ abstract class AbstractFee implements FeeInterface
     {
         $this->auction = $auction;
     }
-    
+
     public function getAuction(): \ToBeAgile\Auction
     {
         return $this->auction;

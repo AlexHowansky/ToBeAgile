@@ -7,10 +7,14 @@ class PostOffice
 
     protected $emails = [];
 
-    public function sendEmail(string $address, string $message)
+    public function doesLogContain(string $address, string $message): bool
     {
-        $this->emails[] = [$address, $message];
-        file_put_contents('/tmp/mail', "To: $address, Message: $message\n", FILE_APPEND);
+        try {
+            $this->findEmail($address, $message);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     public function findEmail(string $address, string $message): string
@@ -23,14 +27,10 @@ class PostOffice
         throw new \Exception('Mail not found.');
     }
 
-    public function doesLogContain(string $address, string $message): bool
+    public function sendEmail(string $address, string $message)
     {
-        try {
-            $this->findEmail($address, $message);
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
+        $this->emails[] = [$address, $message];
+        file_put_contents('/tmp/mail', sprintf("To: %s, Message: %s\n", $address, $message), FILE_APPEND);
     }
 
 }

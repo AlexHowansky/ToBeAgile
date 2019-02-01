@@ -20,4 +20,3 @@ class LuxuryCarTax extends AbstractFee
     }
 
 }
-

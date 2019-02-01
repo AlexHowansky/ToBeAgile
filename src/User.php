@@ -4,19 +4,20 @@ namespace ToBeAgile;
 
 class User
 {
+
     protected $firstName;
 
+    protected $isSeller = false;
+
     protected $lastName;
+
+    protected $loggedIn = false;
+
+    protected $password;
 
     protected $userEmail;
 
     protected $userName;
-
-    protected $password;
-    
-    protected $loggedIn = false;
-    
-    protected $isSeller = false;
 
     public function __construct(
         string $firstName,
@@ -41,42 +42,42 @@ class User
     {
         return $this->lastName;
     }
-    
-    public function getUserEmail(): string
-    {
-        return $this->userEmail;
-    }
-    
-    public function getUserName(): string
-    {
-        return $this->userName;
-    }
 
     public function getPassword(): string
     {
         return $this->password;
     }
-    
+
+    public function getUserEmail(): string
+    {
+        return $this->userEmail;
+    }
+
+    public function getUserName(): string
+    {
+        return $this->userName;
+    }
+
     public function isLoggedIn(): bool
     {
         return $this->loggedIn;
     }
-    
-    public function login()
-    {
-        $this->loggedIn = true;
-    }
-    
-    public function logout()
-    {
-        $this->loggedIn = false;
-    }
-    
+
     public function isSeller(): bool
     {
         return $this->isSeller;
     }
-    
+
+    public function login()
+    {
+        $this->loggedIn = true;
+    }
+
+    public function logout()
+    {
+        $this->loggedIn = false;
+    }
+
     public function setSeller(bool $isSeller)
     {
         $this->isSeller = $isSeller;

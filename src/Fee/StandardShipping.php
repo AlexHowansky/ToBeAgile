@@ -14,7 +14,7 @@ class StandardShipping extends AbstractFee
 
     public function computeFee()
     {
-        if (!in_array($this->getAuction()->getCategory(), self::NOT_APPLICABLE_CATEGORIES)) {
+        if (in_array($this->getAuction()->getCategory(), self::NOT_APPLICABLE_CATEGORIES) === false) {
             $this->getAuction()->addBuyerAmount(self::FEE);
         }
     }

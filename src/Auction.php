@@ -4,41 +4,47 @@ namespace ToBeAgile;
 
 class Auction
 {
-    
+
     const STATUS_NEW = 0;
     const STATUS_OPEN = 1;
     const STATUS_CLOSED = 2;
-    
-    const CATEGORY_DOWNLOADABLE_SOFTWARE = "Downloadable Software";
-    const CATEGORY_CAR = "Car";
-    const CATEGORY_OTHER = "Other";
-    
-    protected $user;
-    
-    protected $startPrice;
-    
-    protected $itemDescription;
-    
-    protected $startTime;
-    
-    protected $endTime;
-    
-    protected $status = self::STATUS_NEW;
-    
-    protected $highestBidder = null;
-    
-    protected $highestBid = null;
-    
-    protected $postOffice = null;
-    
-    protected $sellerAmount = 0;
-     
+
+    const CATEGORY_DOWNLOADABLE_SOFTWARE = 'Downloadable Software';
+    const CATEGORY_CAR = 'Car';
+    const CATEGORY_OTHER = 'Other';
+
     protected $buyerAmount = 0;
-    
+
     protected $category;
 
-    public function __construct(User $user, float $startPrice, string $itemDescription, int $startTime, int $endTime, string $category)
-    {
+    protected $endTime;
+
+    protected $highestBid = null;
+
+    protected $highestBidder = null;
+
+    protected $itemDescription;
+
+    protected $postOffice = null;
+
+    protected $sellerAmount = 0;
+
+    protected $startPrice;
+
+    protected $startTime;
+
+    protected $status = self::STATUS_NEW;
+
+    protected $user;
+
+    public function __construct(
+        User $user,
+        float $startPrice,
+        string $itemDescription,
+        int $startTime,
+        int $endTime,
+        string $category
+    ) {
         if ($user->isLoggedIn() === false) {
             throw new \Exception('User not logged in');
         }
@@ -58,61 +64,15 @@ class Auction
         $this->endTime = $endTime;
         $this->category = $category;
     }
-    
-    public function getUser(): User
+
+    public function addBuyerAmount(float $amount)
     {
-        return $this->user;
+        $this->buyerAmount += $amount;
     }
 
-    public function getStartingPrice(): float
+    public function addSellerAmount(float $amount)
     {
-        return $this->startPrice;
-    }
-    
-    public function getItemDescription(): string
-    {
-        return $this->itemDescription;
-    }
-    
-    public function getStartTime(): int
-    {
-        return $this->startTime;
-    }
-    
-    public function getEndTime(): int
-    {
-        return $this->endTime;
-    }
-    
-    public function isOpen(): bool
-    {
-        return $this->status == self::STATUS_OPEN;
-    }
-    
-    public function onStart()
-    {
-        if ($this->status !== self::STATUS_NEW) {
-            throw new \Exception('Only new auctions may be started.');
-        }
-        $this->status = self::STATUS_OPEN;
-    }
-    
-    public function onClose()
-    {
-        if ($this->status !== self::STATUS_OPEN) {
-            throw new \Exception('Only open auctions may be closed.');
-        }
-        $this->status = self::STATUS_CLOSED;
-        if ($this->postOffice instanceOf PostOffice) {
-            (\ToBeAgile\Notifier\NotifierFactory::getNotifier($this))->notify();
-        }
-        if ($this->hasBids()) {
-            $this->sellerAmount = $this->getHighestBid();
-            $this->buyerAmount = $this->getHighestBid();
-            foreach (\ToBeAgile\Fee\FeeFactory::getFees($this) as $fee) {
-                $fee->computeFee();
-            }
-        }
+        $this->sellerAmount += $amount;
     }
 
     public function bid(User $user, float $bid)
@@ -123,7 +83,7 @@ class Auction
         if ($user->isLoggedIn() === false) {
             throw new \Exception('User is not logged in.');
         }
-        if ($this->hasBids()) {
+        if ($this->hasBids() === true) {
             if ($bid <= $this->highestBid) {
                 throw new \Exception('Bid must be higher than existing bid ' . $this->highestBid);
             }
@@ -135,87 +95,137 @@ class Auction
         $this->highestBidder = $user;
         $this->highestBid = $bid;
     }
-    
-    public function hasBids(): bool
+
+    public function getBuyerAmount()
     {
-        return $this->highestBidder !== null;
+        return $this->buyerAmount;
     }
-    
-    public function getHighestBidder(): User {
-        if ($this->highestBidder === null) {
-             throw new \Exception('No bids yet.');
-        }
-        return $this->highestBidder;
+
+    public function getCategory()
+    {
+        return $this->category;
     }
-    
-    public function getHighestBid(): float {
+
+    public function getEndTime(): int
+    {
+        return $this->endTime;
+    }
+
+    public function getHighestBid(): float
+    {
         if ($this->highestBid === null) {
              throw new \Exception('No bids yet.');
         }
         return $this->highestBid;
     }
-    
-    public function getStatus(): int
+
+    public function getHighestBidder(): User
     {
-        return $this->status;
+        if ($this->highestBidder === null) {
+             throw new \Exception('No bids yet.');
+        }
+        return $this->highestBidder;
     }
-    
-    public function setPostOffice(PostOffice $postOffice)
+
+    public function getItemDescription(): string
     {
-        $this->postOffice = $postOffice;
+        return $this->itemDescription;
     }
-    
+
+    public function getNoBidsMessage()
+    {
+        return sprintf('Sorry, your auction for %s did not have any bidders.', $this->getItemDescription());
+    }
+
     public function getPostOffice(): PostOffice
     {
         return $this->postOffice;
     }
-    
-    public function getNoBidsMessage()
-    {
-        return 'Sorry, your auction for ' . $this->getItemDescription() . ' did not have any bidders.';
-    }
-    
-    public function getSoldMessage()
-    {
-        return 'Your ' . $this->getItemDescription() . ' auction sold to bidder ' . $this->getHighestBidder()->getUserEmail() . ' for ' . $this->getHighestBid() . ' monies.';
-    }
-    
-    public function getWonMessage()
-    {
-        return 'Congratulations! You won an auction for a ' . $this->getItemDescription() . ' from ' . $this->getUser()->getUserEmail() . ' for ' . $this->getHighestBid() . ' monies.';    
-    }
-    
+
     public function getSellerAmount()
     {
         return $this->sellerAmount;
     }
-    
-    public function getCategory()
+
+    public function getSoldMessage()
     {
-        return $this->category;
+        return sprintf(
+            'Your %s auction sold to bidder %s for %0.2f monetary units.',
+            $this->getItemDescription(),
+            $this->getHighestBidder()->getUserEmail(),
+            $this->getHighestBid()
+        );
     }
-    
-    public function getBuyerAmount()
+
+    public function getStartTime(): int
     {
-        return $this->buyerAmount;
+        return $this->startTime;
     }
-    
-    public function getShippingFee()
+
+    public function getStartingPrice(): float
     {
-        return $this->shippingFee;
+        return $this->startPrice;
     }
-    
-    public function getTax()
+
+    public function getStatus(): int
     {
-        return $this->tax;
+        return $this->status;
     }
-    
-    public function addSellerAmount(float $amount)
+
+    public function getUser(): User
     {
-        $this->sellerAmount += $amount;
+        return $this->user;
     }
-    public function addBuyerAmount(float $amount)
+
+    public function getWonMessage()
     {
-        $this->buyerAmount += $amount;
+        return sprintf(
+            'Congratulations! You won an auction for a %s from %s for %0.2f monetary units',
+            $this->getItemDescription(),
+            $this->getUser()->getUserEmail(),
+            $this->getHighestBid()
+        );
     }
+
+    public function hasBids(): bool
+    {
+        return $this->highestBidder !== null;
+    }
+
+    public function isOpen(): bool
+    {
+        return $this->status == self::STATUS_OPEN;
+    }
+
+    public function onClose()
+    {
+        if ($this->status !== self::STATUS_OPEN) {
+            throw new \Exception('Only open auctions may be closed.');
+        }
+        $this->status = self::STATUS_CLOSED;
+        if ($this->postOffice instanceof PostOffice) {
+            (\ToBeAgile\Notifier\NotifierFactory::getNotifier($this))->notify();
+        }
+        if ($this->hasBids() === true) {
+            $this->sellerAmount = $this->getHighestBid();
+            $this->buyerAmount = $this->getHighestBid();
+            foreach (\ToBeAgile\Fee\FeeFactory::getFees($this) as $fee) {
+                $fee->computeFee();
+            }
+        }
+    }
+
+    public function onStart()
+    {
+        if ($this->status !== self::STATUS_NEW) {
+            throw new \Exception('Only new auctions may be started.');
+        }
+        $this->status = self::STATUS_OPEN;
+    }
+
+    public function setPostOffice(PostOffice $postOffice)
+    {
+        $this->postOffice = $postOffice;
+    }
+
 }

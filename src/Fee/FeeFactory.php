@@ -4,7 +4,7 @@ namespace ToBeAgile\Fee;
 
 class FeeFactory
 {
-    
+
     public static function getFees(\ToBeAgile\Auction $auction): array
     {
         return [
@@ -14,5 +14,5 @@ class FeeFactory
             new SellerFee($auction),
         ];
     }
-    
+
 }

@@ -11,7 +11,7 @@ abstract class AbstractNotifier implements NotifierInterface
     {
         $this->auction = $auction;
     }
-    
+
     public function getAuction(): \ToBeAgile\Auction
     {
         return $this->auction;
