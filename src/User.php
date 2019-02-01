@@ -6,7 +6,7 @@ class User
 {
 
     protected $firstName;
-    
+
     protected $isPreferredSeller = false;
 
     protected $isSeller = false;
