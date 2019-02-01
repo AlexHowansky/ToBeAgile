@@ -4,6 +4,7 @@ namespace ToBeAgile\Fee;
 
 abstract class AbstractFee implements FeeInterface 
 {
+
     protected $auction;
 
     public function __construct(\ToBeAgile\Auction $auction)
