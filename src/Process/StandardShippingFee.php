@@ -12,14 +12,15 @@ class StandardShippingFee extends AbstractProcess
         \ToBeAgile\Auction::CATEGORY_DOWNLOADABLE_SOFTWARE,
     ];
 
-    public function process()
+    protected function iShouldProcess(): bool
     {
-        if (
-            $this->getAuction()->hasBids() === false ||
-            in_array($this->getAuction()->getCategory(), self::NOT_APPLICABLE_CATEGORIES) === true
-        ) {
-            return;
-        }
+        return
+            $this->getAuction()->hasBids() === true &&
+            in_array($this->getAuction()->getCategory(), self::NOT_APPLICABLE_CATEGORIES) === false;
+    }
+
+    protected function process()
+    {
         $this->getAuction()->addBuyerAmount(self::FEE);
     }
 

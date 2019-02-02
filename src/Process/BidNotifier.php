@@ -5,14 +5,15 @@ namespace ToBeAgile\Process;
 class BidNotifier extends AbstractProcess
 {
 
-    public function process()
+    protected function iShouldProcess(): bool
     {
-        if (
-            $this->getAuction()->hasBids() === false ||
-            $this->getAuction()->getPostOffice() === null
-        ) {
-            return;
-        }
+        return
+            $this->getAuction()->hasBids() === true &&
+            $this->getAuction()->getPostOffice() !== null;
+    }
+
+    protected function process()
+    {
         $this->getAuction()->getPostOffice()->sendEmail(
             $this->getAuction()->getUser()->getUserEmail(),
             $this->getAuction()->getSoldMessage()

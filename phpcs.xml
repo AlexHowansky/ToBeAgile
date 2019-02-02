@@ -8,6 +8,8 @@
         <exclude name="PEAR.Commenting.FunctionComment.Missing"/>
         <exclude name="Squiz.Commenting.FunctionComment.Missing"/>
         <exclude name="Generic.Functions.OpeningFunctionBraceBsdAllman.BraceOnSameLine"/>
+        <exclude name="Squiz.PHP.DisallowBooleanStatement.Found"/>
+        <exclude name="Squiz.WhiteSpace.LanguageConstructSpacing.IncorrectSingle"/>
     </rule>
     <file>src</file>
 </ruleset>

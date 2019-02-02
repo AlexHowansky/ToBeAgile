@@ -12,9 +12,20 @@ abstract class AbstractProcess implements ProcessInterface
         $this->auction = $auction;
     }
 
-    public function getAuction(): \ToBeAgile\Auction
+    protected function getAuction(): \ToBeAgile\Auction
     {
         return $this->auction;
     }
+
+    abstract protected function iShouldProcess(): bool;
+
+    public function invoke()
+    {
+        if ($this->iShouldProcess() === true) {
+            $this->process();
+        }
+    }
+
+    abstract protected function process();
 
 }

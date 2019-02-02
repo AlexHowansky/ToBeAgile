@@ -7,24 +7,29 @@ class ExpensiveItemLog extends AbstractProcess
 
     const FILENAME = 'expensive.log';
 
+    const MESSAGE = '%s sold an expensive item valued at %.02f to %s';
+
     const THRESHOLD = 10000;
 
-    public function process()
+    protected function iShouldProcess(): bool
     {
-        if (
-            $this->getAuction()->hasBids() === false ||
-            $this->getAuction()->getLogger() === null ||
-            $this->getAuction()->getHighestBid() <= self::THRESHOLD
-        ) {
-            return;
-        }
-        $message = sprintf(
-            '%s sold an expensive item valued at %.02f to %s',
-            $this->getAuction()->getUser()->getUserName(),
-            $this->getAuction()->getHighestBid(),
-            $this->getAuction()->getHighestBidder()->getUserName()
+        return
+            $this->getAuction()->hasBids() === true &&
+            $this->getAuction()->getLogger() !== null &&
+            $this->getAuction()->getHighestBid() > self::THRESHOLD;
+    }
+
+    protected function process()
+    {
+        $this->getAuction()->getLogger()->log(
+            self::FILENAME,
+            sprintf(
+                self::MESSAGE,
+                $this->getAuction()->getUser()->getUserName(),
+                $this->getAuction()->getHighestBid(),
+                $this->getAuction()->getHighestBidder()->getUserName()
+            )
         );
-        $this->getAuction()->getLogger()->log(self::FILENAME, $message);
     }
 
 }
