@@ -318,4 +318,14 @@ class AuctionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->logger->findMessage($fileName, $message));
     }
 
+    public function testPreferredSellerReducedRate()
+    {
+        $amount = 5;
+        $this->user->setPreferredSeller(true);
+        $this->auction->onStart();
+        $this->auction->bid($this->user, $amount);
+        $this->auction->onClose();
+        $this->assertEquals($amount * (1 - \ToBeAgile\Process\SellerFee::PREFERRED_FEE_RATE), $this->auction->getSellerAmount(), '', 0.01);
+    }
+
 }
