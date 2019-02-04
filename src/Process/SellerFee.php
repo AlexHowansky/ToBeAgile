@@ -16,7 +16,9 @@ class SellerFee extends AbstractProcess
 
     protected function process()
     {
-        $rate = $this->getAuction()->getUser()->isPreferredSeller() === true ? self::PREFERRED_FEE_RATE : self::STANDARD_FEE_RATE;
+        $rate = $this->getAuction()->getUser()->isPreferredSeller() === true
+            ? self::PREFERRED_FEE_RATE
+            : self::STANDARD_FEE_RATE;
         $this->getAuction()->addSellerAmount(- $this->getAuction()->getHighestBid() * $rate);
     }
 
