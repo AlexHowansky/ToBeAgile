@@ -14,7 +14,7 @@ class SellerFee extends AbstractProcess
         return $this->getAuction()->hasBids() === true;
     }
 
-    protected function process()
+    protected function process(): void
     {
         $rate = $this->getAuction()->getUser()->isPreferredSeller() === true
             ? self::PREFERRED_FEE_RATE

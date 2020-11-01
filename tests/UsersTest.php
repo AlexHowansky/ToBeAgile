@@ -7,7 +7,7 @@ class UsersTest extends \PHPUnit\Framework\TestCase
 
     protected $users;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->users = new \ToBeAgile\Users();
 
@@ -35,31 +35,25 @@ class UsersTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($userName, $user->getUserName());
     }
     
-    /**
-     * @expectedException \Exception
-     */
     public function testUserNotFound()
     {
+        $this->expectException(\Exception::class);
         $userName = 'Oscar';
         $this->users->findByUserName($userName);
         $this->assertTrue(false);
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testLoginNoUser()
     {
+        $this->expectException(\Exception::class);
         $userName = 'Oscar';
         $password = 'Grouch';
         $this->users->login($userName, $password);
     }
     
-    /**
-     * @expectedException \Exception
-     */
     public function testLoginBadPassword()
     {
+        $this->expectException(\Exception::class);
         $userName = 'BigBird';
         $password = 'IamRed';
         $this->users->login($userName, $password);
@@ -78,11 +72,9 @@ class UsersTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($user->isLoggedIn());
     }
   
-    /**
-     * @expectedException \Exception
-     */
     public function testCantCreateDuplicateUser()
     {
+        $this->expectException(\Exception::class);
         $firstName = 'Big';
         $lastName = 'Bird';
         $userEmail = 'bigbird@sesame.com';

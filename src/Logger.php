@@ -5,7 +5,12 @@ namespace ToBeAgile;
 class Logger
 {
 
-    protected $logs = [];
+    /**
+     * Pseudo logger storage.
+     *
+     * @var array<array>
+     */
+    protected array $logs = [];
 
     public function findMessage(string $fileName, string $message): bool
     {
@@ -17,7 +22,7 @@ class Logger
         }
     }
 
-    public function log(string $fileName, string $message)
+    public function log(string $fileName, string $message): void
     {
         file_put_contents('/tmp/log', $fileName . ' : ' . $message . "\n");
         $this->logs[] = [$fileName, $message];

@@ -5,7 +5,12 @@ namespace ToBeAgile;
 class PostOffice
 {
 
-    protected $emails = [];
+    /**
+     * Pseudo email storage.
+     *
+     * @var array<array>
+     */
+    protected array $emails = [];
 
     public function doesLogContain(string $address, string $message): bool
     {
@@ -27,7 +32,7 @@ class PostOffice
         throw new \Exception('Mail not found.');
     }
 
-    public function sendEmail(string $address, string $message)
+    public function sendEmail(string $address, string $message): void
     {
         $this->emails[] = [$address, $message];
         file_put_contents('/tmp/mail', sprintf("To: %s, Message: %s\n", $address, $message), FILE_APPEND);

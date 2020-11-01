@@ -7,6 +7,6 @@ interface ProcessInterface
 
     public function __construct(\ToBeAgile\Auction $auction);
 
-    public function invoke();
+    public function invoke(): void;
 
 }

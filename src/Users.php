@@ -5,7 +5,12 @@ namespace ToBeAgile;
 class Users
 {
 
-    protected $users = [];
+    /**
+     * Pseudo users storage.
+     *
+     * @var array<User>
+     */
+    protected array $users = [];
 
     public function findByUserName(string $userName): User
     {
@@ -27,8 +32,13 @@ class Users
         throw new \Exception('Bad password.');
     }
 
-    public function register($firstName, $lastName, $userEmail, $userName, $password): User
-    {
+    public function register(
+        string $firstName,
+        string $lastName,
+        string $userEmail,
+        string $userName,
+        string $password
+    ): User {
         if ($this->userExists($userName) === true) {
             throw new \Exception('Duplicate user.');
         }

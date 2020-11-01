@@ -5,7 +5,7 @@ namespace ToBeAgile\Process;
 abstract class AbstractProcess implements ProcessInterface
 {
 
-    protected $auction;
+    protected \ToBeAgile\Auction $auction;
 
     public function __construct(\ToBeAgile\Auction $auction)
     {
@@ -17,15 +17,15 @@ abstract class AbstractProcess implements ProcessInterface
         return $this->auction;
     }
 
-    abstract protected function iShouldProcess(): bool;
-
-    public function invoke()
+    public function invoke(): void
     {
         if ($this->iShouldProcess() === true) {
             $this->process();
         }
     }
 
-    abstract protected function process();
+    abstract protected function iShouldProcess(): bool;
+
+    abstract protected function process(): void;
 
 }

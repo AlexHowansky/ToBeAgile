@@ -14,7 +14,7 @@ class CarShippingFee extends AbstractProcess
             $this->getAuction()->getCategory() === \ToBeAgile\Auction::CATEGORY_CAR;
     }
 
-    protected function process()
+    protected function process(): void
     {
         $this->getAuction()->addBuyerAmount(self::FEE);
     }

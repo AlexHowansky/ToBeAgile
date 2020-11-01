@@ -11,7 +11,7 @@ class AuctionTest extends \PHPUnit\Framework\TestCase
 
     protected $postOffice;
 
-    public function setUp()
+    public function setUp(): void
     {
         $firstName = 'Grover';
         $lastName = 'Spielmann';
@@ -36,11 +36,9 @@ class AuctionTest extends \PHPUnit\Framework\TestCase
 
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testCreateAuctionNotLoggedIn()
     {
+        $this->expectException(\Exception::class);
         $startPrice = 1;
         $itemDescription = "";
         $startTime = time() + 3600;
@@ -49,11 +47,9 @@ class AuctionTest extends \PHPUnit\Framework\TestCase
         new \ToBeAgile\Auction($this->user, $startPrice, $itemDescription, $startTime, $endTime, \ToBeAgile\Auction::CATEGORY_OTHER);
     }
 
-     /**
-     * @expectedException \Exception
-     */
     public function testCreateAuctionNotSeller()
     {
+        $this->expectException(\Exception::class);
         $startPrice = 1;
         $itemDescription = "";
         $startTime = time() + 3600;
@@ -62,11 +58,9 @@ class AuctionTest extends \PHPUnit\Framework\TestCase
         new \ToBeAgile\Auction($this->user, $startPrice, $itemDescription, $startTime, $endTime, \ToBeAgile\Auction::CATEGORY_OTHER);
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testCreateAuctionStartInPast()
     {
+        $this->expectException(\Exception::class);
         $startPrice = 1;
         $itemDescription = "";
         $startTime = time() - 3600;
@@ -74,11 +68,9 @@ class AuctionTest extends \PHPUnit\Framework\TestCase
         new \ToBeAgile\Auction($this->user, $startPrice, $itemDescription, $startTime, $endTime, \ToBeAgile\Auction::CATEGORY_OTHER);
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testCreateAuctionStartAfterEnd()
     {
+        $this->expectException(\Exception::class);
         $startPrice = 1;
         $itemDescription = "";
         $startTime = time() + 3600;
@@ -116,30 +108,24 @@ class AuctionTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($auction->isOpen());
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testBidUserNotLoggedIn()
     {
+        $this->expectException(\Exception::class);
         $this->user->logout();
         $this->auction->onStart();
         $this->auction->bid($this->user, 0);
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testBidAuctionNotStarted()
     {
+        $this->expectException(\Exception::class);
         $bid = 0;
         $this->auction->bid($this->user, $bid);
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testBidNotHigest()
     {
+        $this->expectException(\Exception::class);
         $bid = 0;
         $this->auction->onStart();
         $this->auction->bid($this->user, $bid);
@@ -158,65 +144,51 @@ class AuctionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($bid, $this->auction->getHighestBid());
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testNoHighestBid()
     {
+        $this->expectException(\Exception::class);
         $this->auction->getHighestBid();
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testNoBidders()
     {
+        $this->expectException(\Exception::class);
         $this->auction->getHighestBidder();
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testBidLessThanStart()
     {
+        $this->expectException(\Exception::class);
         $bid = 1;
         $this->auction->onStart();
         $this->auction->bid($this->user, $bid);
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testCantOpenAlreadyOpened()
     {
+        $this->expectException(\Exception::class);
         $this->auction->onStart();
         $this->assertTrue($this->auction->getStatus() === \ToBeAgile\Auction::STATUS_OPEN);
         $this->auction->onStart();
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testCantCloseAlreadyClosed()
     {
+        $this->expectException(\Exception::class);
         $this->auction->onStart();
         $this->auction->onClose();
         $this->auction->onClose();
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testCantCloseNew()
     {
+        $this->expectException(\Exception::class);
         $this->auction->onClose();
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testCantReopen()
     {
+        $this->expectException(\Exception::class);
         $this->auction->onStart();
         $this->auction->onClose();
         $this->auction->onStart();

@@ -13,31 +13,31 @@ class Auction
     const CATEGORY_CAR = 'Car';
     const CATEGORY_OTHER = 'Other';
 
-    protected $buyerAmount = 0;
+    protected float $buyerAmount = 0;
 
-    protected $category;
+    protected string $category;
 
-    protected $endTime;
+    protected int $endTime;
 
-    protected $highestBid = null;
+    protected float $highestBid = 0;
 
-    protected $highestBidder = null;
+    protected ?User $highestBidder = null;
 
-    protected $itemDescription;
+    protected string $itemDescription;
 
-    protected $logger = null;
+    protected ?Logger $logger = null;
 
-    protected $postOffice = null;
+    protected ?PostOffice $postOffice = null;
 
-    protected $sellerAmount = 0;
+    protected float $sellerAmount = 0;
 
-    protected $startPrice;
+    protected float $startPrice;
 
-    protected $startTime;
+    protected int $startTime;
 
-    protected $status = self::STATUS_NEW;
+    protected int $status = self::STATUS_NEW;
 
-    protected $user;
+    protected User $user;
 
     public function __construct(
         User $user,
@@ -67,17 +67,17 @@ class Auction
         $this->category = $category;
     }
 
-    public function addBuyerAmount(float $amount)
+    public function addBuyerAmount(float $amount): void
     {
         $this->buyerAmount += $amount;
     }
 
-    public function addSellerAmount(float $amount)
+    public function addSellerAmount(float $amount): void
     {
         $this->sellerAmount += $amount;
     }
 
-    public function bid(User $user, float $bid)
+    public function bid(User $user, float $bid): void
     {
         if ($this->isOpen() === false) {
             throw new \Exception('Auction is not open.');
@@ -98,12 +98,12 @@ class Auction
         $this->highestBid = $bid;
     }
 
-    public function getBuyerAmount()
+    public function getBuyerAmount(): float
     {
         return $this->buyerAmount;
     }
 
-    public function getCategory()
+    public function getCategory(): string
     {
         return $this->category;
     }
@@ -115,7 +115,7 @@ class Auction
 
     public function getHighestBid(): float
     {
-        if ($this->highestBid === null) {
+        if ($this->highestBid === 0.0) {
              throw new \Exception('No bids yet.');
         }
         return $this->highestBid;
@@ -134,27 +134,27 @@ class Auction
         return $this->itemDescription;
     }
 
-    public function getLogger()
+    public function getLogger(): ?Logger
     {
         return $this->logger;
     }
 
-    public function getNoBidsMessage()
+    public function getNoBidsMessage(): string
     {
         return sprintf('Sorry, your auction for %s did not have any bidders.', $this->getItemDescription());
     }
 
-    public function getPostOffice()
+    public function getPostOffice(): ?PostOffice
     {
         return $this->postOffice;
     }
 
-    public function getSellerAmount()
+    public function getSellerAmount(): float
     {
         return $this->sellerAmount;
     }
 
-    public function getSoldMessage()
+    public function getSoldMessage(): string
     {
         return sprintf(
             'Your %s auction sold to bidder %s for %0.2f monetary units.',
@@ -164,14 +164,14 @@ class Auction
         );
     }
 
-    public function getStartTime(): int
-    {
-        return $this->startTime;
-    }
-
     public function getStartingPrice(): float
     {
         return $this->startPrice;
+    }
+
+    public function getStartTime(): int
+    {
+        return $this->startTime;
     }
 
     public function getStatus(): int
@@ -184,7 +184,7 @@ class Auction
         return $this->user;
     }
 
-    public function getWonMessage()
+    public function getWonMessage(): string
     {
         return sprintf(
             'Congratulations! You won an auction for a %s from %s for %0.2f monetary units',
@@ -204,7 +204,7 @@ class Auction
         return $this->status == self::STATUS_OPEN;
     }
 
-    public function onClose()
+    public function onClose(): void
     {
         if ($this->status !== self::STATUS_OPEN) {
             throw new \Exception('Only open auctions may be closed.');
@@ -213,7 +213,7 @@ class Auction
         $this->runCloseProcesses();
     }
 
-    public function onStart()
+    public function onStart(): void
     {
         if ($this->status !== self::STATUS_NEW) {
             throw new \Exception('Only new auctions may be started.');
@@ -221,21 +221,21 @@ class Auction
         $this->status = self::STATUS_OPEN;
     }
 
-    protected function runCloseProcesses()
+    protected function runCloseProcesses(): void
     {
-        $this->sellerAmount = $this->hasBids() === true ? $this->getHighestBid() : null;
-        $this->buyerAmount = $this->hasBids() === true ? $this->getHighestBid() : null;
+        $this->sellerAmount = $this->hasBids() === true ? $this->getHighestBid() : 0;
+        $this->buyerAmount = $this->hasBids() === true ? $this->getHighestBid() : 0;
         foreach (\ToBeAgile\Process\CloseProcessFactory::getProcesses($this) as $process) {
             $process->invoke();
         }
     }
 
-    public function setLogger(Logger $logger)
+    public function setLogger(Logger $logger): void
     {
         $this->logger = $logger;
     }
 
-    public function setPostOffice(PostOffice $postOffice)
+    public function setPostOffice(PostOffice $postOffice): void
     {
         $this->postOffice = $postOffice;
     }

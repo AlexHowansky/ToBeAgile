@@ -5,21 +5,21 @@ namespace ToBeAgile;
 class User
 {
 
-    protected $firstName;
+    protected string $firstName;
 
-    protected $isPreferredSeller = false;
+    protected bool $isPreferredSeller = false;
 
-    protected $isSeller = false;
+    protected bool $isSeller = false;
 
-    protected $lastName;
+    protected string $lastName;
 
-    protected $loggedIn = false;
+    protected bool $loggedIn = false;
 
-    protected $password;
+    protected string $password;
 
-    protected $userEmail;
+    protected string $userEmail;
 
-    protected $userName;
+    protected string $userName;
 
     public function __construct(
         string $firstName,
@@ -75,17 +75,17 @@ class User
         return $this->isSeller;
     }
 
-    public function login()
+    public function login(): void
     {
         $this->loggedIn = true;
     }
 
-    public function logout()
+    public function logout(): void
     {
         $this->loggedIn = false;
     }
 
-    public function setPreferredSeller(bool $isPreferredSeller)
+    public function setPreferredSeller(bool $isPreferredSeller): void
     {
         if ($this->isSeller() === false) {
             throw new \Exception('Only sellers may be preferred sellers.');
@@ -93,7 +93,7 @@ class User
         $this->isPreferredSeller = $isPreferredSeller;
     }
 
-    public function setSeller(bool $isSeller)
+    public function setSeller(bool $isSeller): void
     {
         $this->isSeller = $isSeller;
     }

@@ -5,6 +5,13 @@ namespace ToBeAgile\Process;
 class CloseProcessFactory
 {
 
+    /**
+     * The list of processes to run an a closing auction.
+     *
+     * @param \ToBeAgile\Auction $auction The auction to process.
+     *
+     * @return array<ProcessInterface>
+     */
     public static function getProcesses(\ToBeAgile\Auction $auction): array
     {
         return [

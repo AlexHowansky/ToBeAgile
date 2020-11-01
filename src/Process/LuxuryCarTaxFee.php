@@ -17,7 +17,7 @@ class LuxuryCarTaxFee extends AbstractProcess
             $this->getAuction()->getHighestBid() > self::THRESHOLD;
     }
 
-    protected function process()
+    protected function process(): void
     {
         $this->getAuction()->addBuyerAmount($this->getAuction()->getHighestBid() * self::TAX_RATE);
     }

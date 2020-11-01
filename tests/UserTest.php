@@ -7,7 +7,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
     
     protected $user = null;
     
-    public function setUp()
+    public function setUp(): void
     {
         $firstName = 'Groverly';
         $lastName = 'Spielmann';
@@ -35,11 +35,9 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->user->isSeller());
     }
     
-    /**
-     * @expectedException \Exception
-     */
     public function testPreferredSellerNotSeller()
     {
+        $this->expectException(\Exception::class);
         $this->user->setSeller(false);
         $this->user->setPreferredSeller(true);
     }
