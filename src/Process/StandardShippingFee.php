@@ -5,17 +5,16 @@ namespace ToBeAgile\Process;
 class StandardShippingFee extends AbstractProcess
 {
 
-    const FEE = 10;
+    public const FEE = 10;
 
-    const NOT_APPLICABLE_CATEGORIES = [
+    protected const NOT_APPLICABLE_CATEGORIES = [
         \ToBeAgile\Auction::CATEGORY_CAR,
         \ToBeAgile\Auction::CATEGORY_DOWNLOADABLE_SOFTWARE,
     ];
 
     protected function iShouldProcess(): bool
     {
-        return
-            $this->getAuction()->hasBids() === true &&
+        return $this->getAuction()->hasBids() === true &&
             in_array($this->getAuction()->getCategory(), self::NOT_APPLICABLE_CATEGORIES) === false;
     }
 

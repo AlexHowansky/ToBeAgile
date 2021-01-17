@@ -5,12 +5,11 @@ namespace ToBeAgile\Process;
 class CarShippingFee extends AbstractProcess
 {
 
-    const FEE = 1000;
+    public const FEE = 1000;
 
     protected function iShouldProcess(): bool
     {
-        return
-            $this->getAuction()->hasBids() === true &&
+        return $this->getAuction()->hasBids() === true &&
             $this->getAuction()->getCategory() === \ToBeAgile\Auction::CATEGORY_CAR;
     }
 

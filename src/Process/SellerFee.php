@@ -5,9 +5,9 @@ namespace ToBeAgile\Process;
 class SellerFee extends AbstractProcess
 {
 
-    const STANDARD_FEE_RATE = 0.02;
+    public const STANDARD_FEE_RATE = 0.02;
 
-    const PREFERRED_FEE_RATE = 0.01;
+    public const PREFERRED_FEE_RATE = 0.01;
 
     protected function iShouldProcess(): bool
     {

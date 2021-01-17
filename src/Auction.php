@@ -5,13 +5,13 @@ namespace ToBeAgile;
 class Auction
 {
 
-    const STATUS_NEW = 0;
-    const STATUS_OPEN = 1;
-    const STATUS_CLOSED = 2;
+    public const STATUS_CLOSED = 0;
+    public const STATUS_NEW = 1;
+    public const STATUS_OPEN = 2;
 
-    const CATEGORY_DOWNLOADABLE_SOFTWARE = 'Downloadable Software';
-    const CATEGORY_CAR = 'Car';
-    const CATEGORY_OTHER = 'Other';
+    public const CATEGORY_CAR = 'Car';
+    public const CATEGORY_DOWNLOADABLE_SOFTWARE = 'Downloadable Software';
+    public const CATEGORY_OTHER = 'Other';
 
     protected float $buyerAmount = 0;
 

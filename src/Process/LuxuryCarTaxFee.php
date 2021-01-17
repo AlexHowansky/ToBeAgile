@@ -5,14 +5,13 @@ namespace ToBeAgile\Process;
 class LuxuryCarTaxFee extends AbstractProcess
 {
 
-    const TAX_RATE = 0.04;
+    public const TAX_RATE = 0.04;
 
-    const THRESHOLD = 50000;
+    public const THRESHOLD = 50000;
 
     protected function iShouldProcess(): bool
     {
-        return
-            $this->getAuction()->hasBids() === true &&
+        return $this->getAuction()->hasBids() === true &&
             $this->getAuction()->getCategory() === \ToBeAgile\Auction::CATEGORY_CAR &&
             $this->getAuction()->getHighestBid() > self::THRESHOLD;
     }

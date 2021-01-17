@@ -5,16 +5,15 @@ namespace ToBeAgile\Process;
 class ExpensiveItemLog extends AbstractProcess
 {
 
-    const FILENAME = 'expensive.log';
+    protected const FILENAME = 'expensive.log';
 
-    const MESSAGE = '%s sold an expensive item valued at %.02f to %s';
+    protected const MESSAGE = '%s sold an expensive item valued at %.02f to %s';
 
-    const THRESHOLD = 10000;
+    public const THRESHOLD = 10000;
 
     protected function iShouldProcess(): bool
     {
-        return
-            $this->getAuction()->hasBids() === true &&
+        return $this->getAuction()->hasBids() === true &&
             $this->getAuction()->getHighestBid() > self::THRESHOLD;
     }
 

@@ -5,14 +5,13 @@ namespace ToBeAgile\Process;
 class CarLog extends AbstractProcess
 {
 
-    const FILENAME = 'car.log';
+    protected const FILENAME = 'car.log';
 
-    const MESSAGE = '%s sold a car valued at %.02f to %s';
+    protected const MESSAGE = '%s sold a car valued at %.02f to %s';
 
     protected function iShouldProcess(): bool
     {
-        return
-            $this->getAuction()->hasBids() === true &&
+        return $this->getAuction()->hasBids() === true &&
             $this->getAuction()->getCategory() === \ToBeAgile\Auction::CATEGORY_CAR;
     }
 
