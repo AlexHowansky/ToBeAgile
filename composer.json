@@ -1,12 +1,11 @@
 {
     "require": {
-        "php": "^7.4"
+        "php": ">=7.4.0"
     },
     "require-dev": {
         "ork/phpcs": "^2.2.0",
         "phpunit/phpunit": "^9.5.1",
-        "phpstan/phpstan": ">=0.12.57 <1.0.0",
-        "roave/security-advisories": "dev-master"
+        "phpstan/phpstan": ">=0.12.69 <1.0.0"
     },
     "autoload": {
         "psr-4": {
@@ -19,8 +18,9 @@
         }
     },
     "scripts": {
+        "coverage": "XDEBUG_MODE=coverage phpunit",
         "phpcs": "phpcs",
         "phpstan": "phpstan analyze",
-        "test": "phpunit"
+        "test": "phpunit --no-coverage --stop-on-defect"
     }
 }

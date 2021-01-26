@@ -3,12 +3,11 @@
     <rule ref="vendor/ork/phpcs/Ork">
         <exclude name="Ork.Commenting.FileComment.Missing"/>
         <exclude name="PEAR.Commenting.FileComment.Missing"/>
-        <exclude name="Squiz.Commenting.ClassComment.Missing"/>
-        <exclude name="Squiz.Commenting.VariableComment.Missing"/>
         <exclude name="PEAR.Commenting.FunctionComment.Missing"/>
+        <exclude name="Squiz.Commenting.ClassComment.Missing"/>
         <exclude name="Squiz.Commenting.FunctionComment.Missing"/>
+        <exclude name="Squiz.Commenting.VariableComment.Missing"/>
         <exclude name="Squiz.PHP.DisallowBooleanStatement.Found"/>
-        <exclude name="Squiz.WhiteSpace.LanguageConstructSpacing.IncorrectSingle"/>
     </rule>
     <file>src</file>
 </ruleset>
