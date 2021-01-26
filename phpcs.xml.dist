@@ -10,4 +10,5 @@
         <exclude name="Squiz.PHP.DisallowBooleanStatement.Found"/>
     </rule>
     <file>src</file>
+    <file>tests</file>
 </ruleset>
