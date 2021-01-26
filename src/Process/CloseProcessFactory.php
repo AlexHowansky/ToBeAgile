@@ -6,7 +6,7 @@ class CloseProcessFactory
 {
 
     /**
-     * The list of processes to run an a closing auction.
+     * The list of processes to run on a closing auction.
      *
      * @param \ToBeAgile\Auction $auction The auction to process.
      *
