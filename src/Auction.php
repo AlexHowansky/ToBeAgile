@@ -19,7 +19,7 @@ class Auction
 
     protected int $endTime;
 
-    protected float $highestBid = 0;
+    protected ?float $highestBid = null;
 
     protected ?User $highestBidder = null;
 
@@ -115,7 +115,7 @@ class Auction
 
     public function getHighestBid(): float
     {
-        if ($this->highestBid === 0.0) {
+        if ($this->highestBid === null) {
              throw new \Exception('No bids yet.');
         }
         return $this->highestBid;
