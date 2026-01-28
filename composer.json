@@ -1,11 +1,11 @@
 {
     "require": {
-        "php": ">=7.4.0"
+        "php": "^8.5.0"
     },
     "require-dev": {
-        "ork/phpcs": "^2.2.0",
-        "phpunit/phpunit": "^9.5.1",
-        "phpstan/phpstan": ">=0.12.69 <1.0.0"
+        "ork/phpcs": ">=3.0.0",
+        "phpunit/phpunit": ">=12.5.8",
+        "phpstan/phpstan": ">=2.1.37"
     },
     "autoload": {
         "psr-4": {
@@ -15,6 +15,11 @@
     "autoload-dev": {
         "psr-4": {
             "ToBeAgileTest\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
     "scripts": {

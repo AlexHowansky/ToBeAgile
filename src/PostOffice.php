@@ -8,7 +8,7 @@ class PostOffice
     /**
      * Pseudo email storage.
      *
-     * @var array<array>
+     * @var array<array<string>>
      */
     protected array $emails = [];
 

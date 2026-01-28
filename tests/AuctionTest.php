@@ -7,6 +7,8 @@ class AuctionTest extends \PHPUnit\Framework\TestCase
 
     protected $auction;
 
+    protected \ToBeAgile\Logger $logger;
+
     protected $postOffice;
 
     protected $user;

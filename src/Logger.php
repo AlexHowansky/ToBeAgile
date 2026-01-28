@@ -8,7 +8,7 @@ class Logger
     /**
      * Pseudo logger storage.
      *
-     * @var array<array>
+     * @var array<array<string>>
      */
     protected array $logs = [];
 
